@@ -11,7 +11,6 @@ const Login = (props) => {
 
     const {actionCurrentUser} = props;
     const history = useHistory();
-    const [] = useState({});
     const [login, setLogin] = useState({email: '', password: ''});
     const [alert, setAlert] = useState(false);
 
