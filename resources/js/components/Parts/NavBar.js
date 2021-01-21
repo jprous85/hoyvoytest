@@ -4,7 +4,7 @@ import {TOKEN, LOGIN} from '../../utils/Constants';
 
 const NavBar = (props) => {
 
-    const {actionCurrentUser} = props;
+    const {actionCurrentUser, user} = props;
     const history = useHistory();
 
     const logout = () => {
@@ -25,6 +25,10 @@ const NavBar = (props) => {
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                     </ul>
+                    <span className={'mr-5'}>Hola {user.name}</span>
+                    &nbsp;
+                    &nbsp;
+                    &nbsp;
                     <a href="#"
                        className={'btn btn-outline-secondary'}
                        onClick={(e) => {

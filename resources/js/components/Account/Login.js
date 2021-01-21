@@ -35,11 +35,11 @@ const Login = (props) => {
         setLogin({...login, [type]: e.target.value});
     }
 
-    const alert_div = (alert) ? (
+    const alert_div = (alert) && (
         <div className="alert alert-warning mt-4">
             The Email or Password are wrong!
         </div>
-    ) : null;
+    );
 
     return (
         <div>

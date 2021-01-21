@@ -13,6 +13,7 @@ const Home = (props) => {
 
     const {currentUser, actionCurrentUser} = props;
     const [users, setUsers] = useState([]);
+    const [user, setUser] = useState([]);
     const [list, setList] = useState(true);
     const history = useHistory();
 
@@ -21,6 +22,10 @@ const Home = (props) => {
             axios.get(`${URL_HOME}?api_token=${currentUser}`)
                 .then(e => {
                     setUsers(e.data);
+                    const u = e.data.find((e) => {
+                        return e.api_token === currentUser;
+                    })
+                    setUser(u);
                 })
                 .catch(c => {
                     console.log(c);
@@ -37,6 +42,7 @@ const Home = (props) => {
         <div className={'container-fluid'}>
             <NavBar
                 actionCurrentUser={actionCurrentUser}
+                user={user}
             />
             <TopShowingMenu
                 list={list}

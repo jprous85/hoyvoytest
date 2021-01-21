@@ -7,9 +7,16 @@ const BlockUsers = (props) => {
     return (
         <div className={'row mt-2'}>
             {users.map(u => (
-                <div className="col-md-4">
+                <div className="col-md-4 mt-2" key={u.id}>
                     <div className="card">
-                        <img src={`/images/users/${u.photo}`} className="card-img-top img-fluid img-thumbnail" alt="photo user"/>
+                        <img src={`/images/users/${u.photo}`}
+                             className="card-img-top img-fluid img-thumbnail"
+                             alt="photo user"
+                             style={{
+                                 'width'    : 150,
+                                 'margin'   : '15px auto'
+                             }}
+                        />
                         <div className="card-body">
                             <div className="row">
                                 <div className="col-md-8">
