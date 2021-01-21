@@ -1,6 +1,17 @@
 import React from 'react';
+import {useHistory} from 'react-router-dom';
+import {TOKEN, LOGIN} from '../../utils/Constants';
 
-const NavBar = () => {
+const NavBar = (props) => {
+
+    const {actionCurrentUser} = props;
+    const history = useHistory();
+
+    const logout = () => {
+        actionCurrentUser('');
+        localStorage.setItem(TOKEN, '');
+        history.push(LOGIN);
+    }
 
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-white border-bottom mb-3">
@@ -14,7 +25,13 @@ const NavBar = () => {
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                     </ul>
-                    <a href="#" className={'btn btn-outline-secondary'}>Sign off</a>
+                    <a href="#"
+                       className={'btn btn-outline-secondary'}
+                       onClick={(e) => {
+                           e.preventDefault();
+                           logout()
+                       }}
+                    >Logout</a>
                 </div>
             </div>
         </nav>

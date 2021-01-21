@@ -1,30 +1,43 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios'
-import {URL_HOME} from '../../utils/Constants'
+import {URL_HOME, LOGIN} from '../../utils/Constants'
 import NavBar from "../Parts/NavBar";
-import {AiOutlineUnorderedList} from 'react-icons/ai';
-import {FaBoxes} from 'react-icons/fa';
 import ListUsers from "./ListUsers";
 import BlockUsers from "./BlockUsers";
 import TopShowingMenu from "../Parts/TopShowingMenu";
+import { connect } from 'react-redux';
+import actionCurrentUser from "../../redux/actions/actionCurrentUser";
+import {useHistory} from 'react-router-dom';
 
-const Home = () => {
+const Home = (props) => {
 
+    const {currentUser, actionCurrentUser} = props;
     const [users, setUsers] = useState([]);
     const [list, setList] = useState(true);
+    const history = useHistory();
 
     useEffect(() => {
-        axios.get(URL_HOME + '?api_token=5lM8aAtZccxJ4IORmw3vntOhEs40qwg6okYsoT9dfQ06rQqhyOSEryZPw1HU')
-            .then(e => {
-                setUsers(e.data);
-            })
+        if (currentUser.length !== 0) {
+            axios.get(`${URL_HOME}?api_token=${currentUser}`)
+                .then(e => {
+                    setUsers(e.data);
+                })
+                .catch(c => {
+                    console.log(c);
+                })
+        }
+        else {
+            history.push(LOGIN);
+        }
     }, []);
 
     const listData = (list)? <ListUsers users={users}/> : <BlockUsers users={users}/>
 
     return (
         <div className={'container-fluid'}>
-            <NavBar/>
+            <NavBar
+                actionCurrentUser={actionCurrentUser}
+            />
             <TopShowingMenu
                 list={list}
                 setList={setList}
@@ -34,4 +47,16 @@ const Home = () => {
     );
 }
 
-export default Home;
+const mapStateToProps = (state) => {
+    return {
+        currentUser: state.currentUser
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        actionCurrentUser: token => dispatch(actionCurrentUser(token))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

@@ -1,10 +1,16 @@
 import React, {useState} from 'react';
+import  { useHistory } from 'react-router-dom'
 import BaseAccount from "./BaseAccount";
 import axios from 'axios'
 import {URL_LOGIN} from '../../utils/Constants';
+import {connect} from "react-redux";
+import actionCurrentUser from './../../redux/actions/actionCurrentUser';
+import {TOKEN} from '../../utils/Constants';
 
-const Login = () => {
+const Login = (props) => {
 
+    const {actionCurrentUser} = props;
+    const history = useHistory();
     const [] = useState({});
     const [login, setLogin] = useState({email: '', password: ''});
     const [alert, setAlert] = useState(false);
@@ -16,7 +22,9 @@ const Login = () => {
                     setAlert(true);
                 } else {
                     setAlert(false);
-                    console.log(e.data);
+                    actionCurrentUser(e.data.api_token);
+                    localStorage.setItem(TOKEN, e.data.api_token);
+                    history.push('/');
                 }
             })
             .catch(e => {
@@ -71,4 +79,17 @@ const Login = () => {
     )
 }
 
-export default Login;
+
+const mapStateToProps = (state) => {
+    return {
+        currentUser: state.currentUser
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        actionCurrentUser: token => dispatch(actionCurrentUser(token))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
