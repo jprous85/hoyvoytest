@@ -15,6 +15,8 @@ run `php artisan migrate:install`
 
 run `php artisan migrate`
 
+Create a `users` folder in /public/images/
+
 run `php artisan db:seed`
 
 _You may have a DDOS error. I use https://randomuser.me for fill database, in this case, repeat the action._
