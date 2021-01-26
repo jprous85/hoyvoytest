@@ -11,20 +11,10 @@ class AccountController extends Controller
 {
     public function login(Request $request)
     {
-        if ($request['api_token'] != null) {
-            $user = User::where('api_token', $request->api_token)->get();
-        } else {
-            try {
-                $user = User::where('email', $request->email)->get();
-                if ($user == null || Hash::check($request->password, $user[0]->password) == false) {
-                    return Json::encode(['data' => 'KO']);
-                }
-            }
-            catch (\Exception $e) {
-                return Json::encode(['data' => 'KO']);
-            }
+        $user = User::where('email', $request->email)->get();
+        if (count($user) == 0 || !Hash::check($request->password, $user[0]->password)) {
+            return Json::encode(['data' => 'KO']);
         }
-
         return $user[0];
     }
 }
