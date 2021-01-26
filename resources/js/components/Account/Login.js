@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import  { useHistory } from 'react-router-dom'
 import BaseAccount from "./BaseAccount";
 import axios from 'axios'
-import {URL_LOGIN} from '../../utils/Constants';
+import {URL_LOGIN, LOGIN_MESSAGES} from '../../utils/Constants';
 import {connect} from "react-redux";
 import actionCurrentUser from './../../redux/actions/actionCurrentUser';
 import {TOKEN} from '../../utils/Constants';
@@ -13,22 +13,31 @@ const Login = (props) => {
     const history = useHistory();
     const [login, setLogin] = useState({email: '', password: ''});
     const [alert, setAlert] = useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
 
     const checkUser = async () => {
-        axios.post(URL_LOGIN, login)
-            .then(e => {
-                if (e.data.data === 'KO') {
-                    setAlert(true);
-                } else {
-                    setAlert(false);
-                    actionCurrentUser(e.data.api_token);
-                    localStorage.setItem(TOKEN, e.data.api_token);
-                    history.push('/');
-                }
-            })
-            .catch(e => {
-                console.log(e);
-            })
+        if (login.email.length !== 0 && login.password.length !== 0) {
+            axios.post(URL_LOGIN, login)
+                .then(e => {
+                    if (e.data.data === 'KO') {
+                        setAlertMessage(LOGIN_MESSAGES[e.data.message]);
+                        setAlert(true);
+                    } else {
+                        setAlertMessage('');
+                        setAlert(false);
+                        actionCurrentUser(e.data.api_token);
+                        localStorage.setItem(TOKEN, e.data.api_token);
+                        history.push('/');
+                    }
+                })
+                .catch(e => {
+                    console.log(e);
+                })
+        }
+        else {
+            setAlert(true);
+            setAlertMessage(LOGIN_MESSAGES.NO_FIELDS);
+        }
     }
 
     const changeInputsValue = (type, e) => {
@@ -37,7 +46,7 @@ const Login = (props) => {
 
     const alert_div = (alert) && (
         <div className="alert alert-warning mt-4">
-            The Email or Password are wrong!
+            {alertMessage}
         </div>
     );
 
